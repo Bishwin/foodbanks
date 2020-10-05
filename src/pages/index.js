@@ -1,12 +1,14 @@
 import React from "react"
 import Layout from "../components/layout"
-import Header from "../components/header"
+import FoodbankListItem from "../components/foodbank"
+import JSONData from "../../content/scraped_foodbanks.json"
 
-export default function Home() {
-    return (
-        <Layout>
-            <Header headerText="foodbank-fighters" />
-            <p>what a world</p>
-        </Layout>
-    );
-}
+const JSONbuildtime = () => (
+    <Layout>
+        <h1>food banks</h1>
+        {JSONData.map((data, index) => {
+            return <FoodbankListItem>{data}</FoodbankListItem>
+        })}
+    </Layout>
+)
+export default JSONbuildtime

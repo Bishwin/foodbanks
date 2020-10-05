@@ -68,3 +68,5 @@ yarn-error.log
 # Yarn Integrity file
 .yarn-integrity
 venv/
+content/
+scraper/scraped_log.txt scraper/todo.txt
