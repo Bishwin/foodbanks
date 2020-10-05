@@ -1,5 +1,5 @@
 import requests, json, pprint
-
+from bs4 import BeautifulSoup
 
 def get_all_foodbanks():
     url='https://www.trusselltrust.org/get-help/find-a-foodbank/foodbank-search/?foodbank_s=all&callback=json'
@@ -41,19 +41,34 @@ def main():
     websites_to_scrape = get_websites_from_foodbanks(foodbanks)
     targets = generate_donation_url(websites_to_scrape)
 
-    html_str = ''
-    for target in targets[:1]:
-        res = requests.get(target, headers=headers)
-        html_str = res.text
-        results = scrape(html_str)
-        results['url'] = target
-        results['name'] = ''
-        pprint.pprint(results)
+    scraped_foodbanks = []
+    for target in targets:
+        try:
+            res = requests.get(target, headers=headers)
+            foodbank_html_page = res.text
+            results = scrape(foodbank_html_page, target)
+            scraped_foodbanks.append(results)
+        except Exception as e:
+            with open('scraped_log.txt', 'a+') as f:
+                f.write(f'target: {target}, error: {e}')
+            print(f'error with target: {target}')
+
+    pprint.pprint(scraped_foodbanks)
+
+#now to write to json
+    with open('../content/scraped_foodbanks.json', 'w') as f:
+        f.write(json.dumps(scraped_foodbanks))
 
 
+def scrape(html_str, url):
+    # get name from url for now. TODO: should get it from original foodbank json instead of computing
+    import re
+    results = { 'name':'', 'url': url, 'wanted': [], 'unwanted': [] }
+    pattern = re.compile(r'://(\w+)?')
+    matches =  pattern.search(url)
+    if matches:
+        results['name'] = matches.group(0)[3:]
 
-def scrape(html_str):
-    from bs4 import BeautifulSoup
     soup = BeautifulSoup(html_str, 'html.parser')
 
     wanted = []
@@ -63,8 +78,7 @@ def scrape(html_str):
         if child.name == 'div':
             if 'page-section--sidebar__block-with-shopping-list' in child.attrs.get('class'):
                 nodes_to_scrape.append(child)
-
-    results = { 'wanted': [], 'unwanted': [] }
+    list_type = ''
     for node in nodes_to_scrape:
         for n in node.children:
             if n.name == 'h3':
