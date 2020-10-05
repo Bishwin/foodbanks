@@ -50,7 +50,7 @@ def main():
             scraped_foodbanks.append(results)
         except Exception as e:
             with open('scraped_log.txt', 'a+') as f:
-                f.write(f'target: {target}, error: {e}')
+                f.write(f'target: {target}, error: {e}\n')
             print(f'error with target: {target}')
 
     pprint.pprint(scraped_foodbanks)
@@ -74,6 +74,9 @@ def scrape(html_str, url):
     wanted = []
     unwanted = []
     nodes_to_scrape = []
+    if not soup.aside:
+        return results
+
     for child in soup.aside.children:
         if child.name == 'div':
             if 'page-section--sidebar__block-with-shopping-list' in child.attrs.get('class'):
