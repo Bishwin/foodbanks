@@ -7,7 +7,9 @@ const JSONbuildtime = () => (
     <Layout>
         <h1>food banks</h1>
         {JSONData.map((data, index) => {
-            return <FoodbankListItem>{data}</FoodbankListItem>
+            if ( data.wanted.length != 0 && data.unwanted.length != 0) {
+                return <FoodbankListItem>{data}</FoodbankListItem>
+            }
         })}
     </Layout>
 )
