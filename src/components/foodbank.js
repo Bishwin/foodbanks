@@ -1,9 +1,10 @@
 import React from "react"
-import CardItem from "./card"
 import MediaObject from "./mediaobject"
 
 export default function FoodbankListItem({ children }) {
     return (
-        <MediaObject>{children}</MediaObject>
+        <div class="tile box is-child">
+            <MediaObject>{children}</MediaObject>
+        </div>
     )
 }

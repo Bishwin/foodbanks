@@ -1,4 +1,4 @@
-import requests, json, pprint
+import requests, json, pprint, re
 from bs4 import BeautifulSoup
 
 def get_all_foodbanks():
@@ -12,12 +12,32 @@ def get_all_foodbanks():
     return json.loads(data)
 
 def get_websites_from_foodbanks(foodbanks):
-    websites_to_scrape = []
+    targets_ = []
     for foodbank in foodbanks:
         info = foodbank.get('foodbank_information')
-        if info.get('website'):
-            websites_to_scrape.append(info.get('website'))
-    return websites_to_scrape
+        print(info)
+        website = info.get('website')
+        name = info.get('name')
+        
+        donation_url = append_donate_path(website)
+       
+        targets_.append({
+            'name': name,
+            'website': website,
+            'url': donation_url
+        })
+    return targets_
+
+def append_donate_path(website):
+    if not website:
+        return ''
+    url_suffix = 'give-help/donate-food/'
+    if website[-1] == '/':
+        f_url = f'{website}{url_suffix}'
+    else:
+        f_url = f'{website}/{url_suffix}'    
+    return f_url
+    
 
 def generate_donation_url(websites_to_scrape):
     targets = []
@@ -39,12 +59,11 @@ def main():
     }
 
     websites_to_scrape = get_websites_from_foodbanks(foodbanks)
-    targets = generate_donation_url(websites_to_scrape)
 
     scraped_foodbanks = []
-    for target in targets:
+    for target in websites_to_scrape:
         try:
-            res = requests.get(target, headers=headers)
+            res = requests.get(target['url'], headers=headers)
             foodbank_html_page = res.text
             results = scrape(foodbank_html_page, target)
             scraped_foodbanks.append(results)
@@ -60,16 +79,10 @@ def main():
         f.write(json.dumps(scraped_foodbanks))
 
 
-def scrape(html_str, url):
-    # get name from url for now. TODO: should get it from original foodbank json instead of computing
-    import re
-    results = { 'name':'', 'url': url, 'wanted': [], 'unwanted': [] }
-    pattern = re.compile(r'://(\w+)?')
-    matches =  pattern.search(url)
-    if matches:
-        results['name'] = matches.group(0)[3:]
-
+def scrape(html_str, url):  
     soup = BeautifulSoup(html_str, 'html.parser')
+    
+    results = { 'name': url['name'], 'url': url['url'], 'wanted': [], 'unwanted': [] }
 
     wanted = []
     unwanted = []
