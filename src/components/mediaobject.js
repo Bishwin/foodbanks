@@ -7,10 +7,8 @@ export default function MediaObject({ children }) {
             <div className="media-content">
                 <div className="content">
                     {/* <h1 className="title">{children.name}</h1>                  */}
-                    <p>
                         <strong className="title">{children.name}</strong> <small><a href={children.url}>Donate</a></small>
                         <br/>
-                    </p>
                 </div>
                 <div class="columns">
 
