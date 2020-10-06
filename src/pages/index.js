@@ -6,7 +6,6 @@ import "./mystyles.scss"
 
 const JSONbuildtime = () => (
     <Layout>
-        <h1>food banks</h1>
         {JSONData.map((data, index) => {
             if ( data.wanted.length !== 0 || data.unwanted.length !== 0) {
                 return <FoodbankListItem key={`foodbank_item_${index}`}>{data}</FoodbankListItem>
