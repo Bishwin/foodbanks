@@ -11,9 +11,6 @@ const ListLink = props => (
 export default function Layout({ children }) {
     return (
         <div className='container'>
-              <div class="notification is-primary">
-    This container is <strong>centered</strong> on desktop and larger viewports.
-  </div>
         <header style={{ marginBottom: '1.5rem' }}>
             <Link to="/" style={{ textShadow: 'none', backgroundImage: 'none' }}>
                 <h3 style={{ display: 'inline' }}>foodbanks.fyi</h3>
