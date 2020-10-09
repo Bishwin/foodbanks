@@ -1,4 +1,5 @@
 import requests, json, pprint, re
+import datetime as dt
 from bs4 import BeautifulSoup
 
 def get_all_foodbanks():
@@ -15,7 +16,6 @@ def get_websites_from_foodbanks(foodbanks):
     targets_ = []
     for foodbank in foodbanks:
         info = foodbank.get('foodbank_information')
-        print(info)
         website = info.get('website')
         name = info.get('name')
         
@@ -66,6 +66,7 @@ def main():
             res = requests.get(target['url'], headers=headers)
             foodbank_html_page = res.text
             results = scrape(foodbank_html_page, target)
+            results['date'] = dt.datetime.now(dt.timezone.utc).strftime("%m/%d/%Y, %H:%M:%S")
             scraped_foodbanks.append(results)
         except Exception as e:
             with open('scraped_log.txt', 'a+') as f:
@@ -74,7 +75,6 @@ def main():
 
     pprint.pprint(scraped_foodbanks)
 
-#now to write to json
     with open('../content/scraped_foodbanks.json', 'w') as f:
         f.write(json.dumps(scraped_foodbanks))
 
@@ -84,8 +84,6 @@ def scrape(html_str, url):
     
     results = { 'name': url['name'], 'url': url['url'], 'wanted': [], 'unwanted': [] }
 
-    wanted = []
-    unwanted = []
     nodes_to_scrape = []
     if not soup.aside:
         return results

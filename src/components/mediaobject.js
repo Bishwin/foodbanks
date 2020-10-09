@@ -6,9 +6,7 @@ export default function MediaObject({ children }) {
 
             <div className="media-content">
                 <div className="content">
-                    {/* <h1 className="title">{children.name}</h1>                  */}
-                        <strong className="title">{children.name}</strong> <small><a href={children.url}>Donate</a></small>
-                        <br/>
+                    <p className="title">{children.name}</p>
                 </div>
                 <div class="columns">
 
@@ -35,25 +33,7 @@ export default function MediaObject({ children }) {
                     </div>
 
                 </div>
-{/* 
-                <nav className="level is-mobile">
-                    <div className="level-left">
-                        <a className="level-item">
-                        <span className="icon is-small"><i className="fas fa-reply"></i></span>
-                        </a>
-                        <a className="level-item">
-                        <span className="icon is-small"><i className="fas fa-retweet"></i></span>
-                        </a>
-                        <a className="level-item">
-                        <span className="icon is-small"><i className="fas fa-heart"></i></span>
-                        </a>
-                    </div>
-                </nav> */}
             </div>
-{/* 
-            <div className="media-right">
-                <button className="delete"></button>
-            </div> */}
         </article>
     )
 }
