@@ -1,4 +1,6 @@
 import React from "react"
+import { OutboundLink } from "gatsby-plugin-google-analytics"
+
 
 export default function MediaObject({ children }) {
     return (
@@ -7,6 +9,7 @@ export default function MediaObject({ children }) {
             <div className="media-content">
                 <div className="content">
                     <p className="title">{children.name}</p>
+                    <p className="subtitle"><OutboundLink href={children.url}>Donate</OutboundLink></p>
                 </div>
                 <div class="columns">
 

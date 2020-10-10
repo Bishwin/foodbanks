@@ -11,10 +11,10 @@ export default function Layout({ children }) {
     return (
         <div className='container'>
             <header>
-                <nav class="navbar" role="navigation" aria-label="main navigation">
-                    <div class="navbar-brand">
-                        <a class="navbar-item" href="https://www.foodbanks.fyi"> foodbanks.fyi</a>
-                        <Link to='/about' class="navbar-item"> About </Link>
+                <nav className="navbar" role="navigation" aria-label="main navigation">
+                    <div className="navbar-brand">
+                        <a className="navbar-item" href="https://www.foodbanks.fyi"> foodbanks.fyi</a>
+                        <Link to='/about' className="navbar-item"> About </Link>
                     </div>
                 </nav>
             </header>
